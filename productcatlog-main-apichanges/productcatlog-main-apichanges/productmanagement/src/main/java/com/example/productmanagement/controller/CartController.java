@@ -51,8 +51,9 @@ public class CartController {
     @Autowired
     private OrderItemRepository orderItemRepository;
 
+
     @PostMapping("/add-cart/{productId}")
-    public ResponseEntity<String> addtocart(@PathVariable Long productId, @RequestParam int quantity,
+    public ResponseEntity<?> addtocart(@PathVariable Long productId, @RequestParam int quantity,
             @RequestHeader("Authorization") String authHeader) {
         try {
             String credentials = new String(Base64.getDecoder().decode(authHeader.split(" ")[1]));
@@ -135,7 +136,7 @@ public class CartController {
     }
 
     @PostMapping("/checkout")
-    public ResponseEntity<String> checkout(@RequestHeader("Authorization") String authHeader,
+    public ResponseEntity<?> checkout(@RequestHeader("Authorization") String authHeader,
             @RequestParam("paymentMethodId") int paymentMethodId,
             @RequestParam("shippingAddress") String shippingAddress) {
         try {

@@ -35,7 +35,7 @@ public class OrderController {
     private OrderItemRepository orderItemRepository;
 
     @GetMapping("/order-history")
-    public ResponseEntity<List<OrderHistoryDTO>> getOrderHistory(@RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<?> getOrderHistory(@RequestHeader("Authorization") String authHeader) {
 
         try {
             String credentials = new String(Base64.getDecoder().decode(authHeader.split(" ")[1]));
@@ -62,11 +62,11 @@ public class OrderController {
                 return new ResponseEntity<>(orderHistoryDTOList, HttpStatus.OK);
             }
 
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("User not found", HttpStatus.UNAUTHORIZED);
 
         } catch (Exception e) {
 
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
