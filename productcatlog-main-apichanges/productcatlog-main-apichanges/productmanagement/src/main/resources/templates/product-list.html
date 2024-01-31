@@ -1,0 +1,86 @@
+<!-- src/main/resources/templates/product-list.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Product Catalog</title>
+  <style>
+    /* styles.css */
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th,
+    td {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    a {
+      text-decoration: none;
+      color: #007bff;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+    .add_to_cart{
+      color: black;
+      background-color: #007bff;
+      border-radius: 2px;
+      border: 1px solid #007bff;
+      padding: 5px;
+    }
+    .add_to_cart a{
+      color: black;
+    }
+    .checkout{
+      color: black;
+      background-color: #007bff;
+      border-radius: 2px;
+      border: 1px solid #007bff;
+      padding: 5px;
+    }
+
+    .checkout a{
+      color: black;
+      padding: 5px; 
+      background-color: #007bff;
+    
+    }
+  </style>
+</head>
+
+<body>
+  <h2>Product Catalog</h2>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Price</th>
+      <th>Available Stock</th>
+      <th>Action</th>
+    </tr>
+    <tr th:each="product : ${products}">
+      <td th:text="${product.name}"></td>
+      <td th:text="${product.description}"></td>
+      <td th:text="${product.price}"></td>
+      <td th:text="${product.availableStock}"></td>
+      <td>
+        <button class="add_to_cart">
+        <a th:href="@{/addToCart/{id}(id=${product.id})}">Add to Cart</a>
+      </button></td>
+    </tr>
+  </table>
+  <button class="checkout">
+  <a th:href="@{/checkout}">Checkout</a>
+</button>
+</body>
+
+</html>

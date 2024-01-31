@@ -1,0 +1,53 @@
+<!-- src/main/resources/templates/checkout.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Checkout</title>
+  <style>
+    /* checkout-styles.css */
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th,
+    td {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    p {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    span {
+      color: #007bff;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>Checkout</h2>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Price</th>
+    </tr>
+    <tr th:each="product : ${cart}">
+      <td th:text="${product.name}"></td>
+      <td th:text="${product.description}"></td>
+      <td th:text="${product.price}"></td>
+    </tr>
+  </table>
+  <p>Total Price: <span th:text="${totalPrice}"></span></p>
+</body>
+
+</html>
