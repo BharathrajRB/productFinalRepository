@@ -1,10 +1,7 @@
 package com.example.productmanagement.modal;
 
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,22 +15,22 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "User")
 public class User {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id;
     private String firstName;
-  
+
     private String lastName;
     private String email;
- 
+
     private String password;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
-   
     private Role role;
-   
+
     private boolean is_active = true;
 
     public Role getRole() {
@@ -52,7 +49,6 @@ public class User {
         this.cartItem = cartItem;
     }
 
-  
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<CartItem> cartItem;
@@ -113,5 +109,4 @@ public class User {
         this.is_active = is_active;
     }
 
-    
 }

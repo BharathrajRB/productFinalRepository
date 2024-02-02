@@ -43,13 +43,18 @@ public class ProductController {
       String password = splitCredentials[1];
       User user = userService.findByEmailAndPassword(email, password);
       if (user != null && "admin".equals(user.getRole_id().getName())) {
-        productService.createProduct(product);
-        return new ResponseEntity<>("Product created successfully", HttpStatus.OK);
+        if (product.getAvailableStock() > 0) {
+          productService.createProduct(product);
+          return new ResponseEntity<>("Product created successfully", HttpStatus.OK);
+        } else {
+          return new ResponseEntity<>("available stock is less than zero", HttpStatus.BAD_REQUEST);
+        }
+
       } else {
         return new ResponseEntity<>("You are not authorized to perform this operation", HttpStatus.FORBIDDEN);
       }
     } catch (Exception e) {
-      return new ResponseEntity<>("Error during product creation", HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>("Error during product creation", HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -104,7 +109,7 @@ public class ProductController {
   }
 
   @GetMapping("/products/{productId}")
-  public Product getProductById(@PathVariable("productId") Long productId){
+  public Product getProductById(@PathVariable("productId") Long productId) {
     return productService.getProductById(productId);
   }
 

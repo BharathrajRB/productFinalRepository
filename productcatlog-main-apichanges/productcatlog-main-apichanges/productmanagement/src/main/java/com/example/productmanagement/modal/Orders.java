@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,17 +31,17 @@ public class Orders {
     private PaymentMethod payment_id;
     private String shippingAddress;
 
-           @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-       private List<OrderItem> orderItems;
-
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<OrderItem> orderItems;
 
     public List<OrderItem> getOrderItems() {
-            return orderItems;
-        }
+        return orderItems;
+    }
 
-        public void setOrderItems(List<OrderItem> orderItems) {
-            this.orderItems = orderItems;
-        }
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
 
     private Timestamp orderdate;
 
@@ -90,6 +92,5 @@ public class Orders {
     public void setOrderdate(Timestamp orderdate) {
         this.orderdate = orderdate;
     }
-
 
 }

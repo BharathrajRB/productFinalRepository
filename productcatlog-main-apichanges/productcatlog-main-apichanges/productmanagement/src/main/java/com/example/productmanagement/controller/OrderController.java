@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.productmanagement.Dto.OrderDetailsDTO;
@@ -25,6 +26,8 @@ import com.example.productmanagement.repository.OrdersRepository;
 import com.example.productmanagement.service.UserService;
 
 @RestController
+
+@RequestMapping("/order-history")
 public class OrderController {
 
     @Autowired
@@ -34,7 +37,7 @@ public class OrderController {
     @Autowired
     private OrderItemRepository orderItemRepository;
 
-    @GetMapping("/order-history")
+    @GetMapping
     public ResponseEntity<?> getOrderHistory(@RequestHeader("Authorization") String authHeader) {
 
         try {
@@ -70,7 +73,7 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/order-history/{orderId}")
+    @GetMapping("/{orderId}")
     public ResponseEntity<?> getOrderById(@PathVariable Long orderId,
             @RequestHeader("Authorization") String authHeader) {
         try {

@@ -60,12 +60,12 @@ public class UserController {
     public ResponseEntity<String> registerUser(@RequestBody User user) {
         try {
             userService.registerUser(user);
-            return new ResponseEntity<>("success👍", HttpStatus.OK);
+            return new ResponseEntity<>(" Register success", HttpStatus.OK);
         } catch (UserAlreadyExistsException e) {
-            return new ResponseEntity<>("User already exists 😞...", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("User already exists ...", HttpStatus.BAD_REQUEST);
         }
     }
-
+ 
     @PostMapping("/login")
     public ResponseEntity<String> loginUser(@RequestHeader("Authorization") String authHeader) {
         try {
@@ -81,7 +81,9 @@ public class UserController {
                 String role = user.getRole_id().getName();
                 String encodedCredentials = userService.encodeCredentials(email, password);
                 System.out.println("Encoded Credentials: " + encodedCredentials);
-                return new ResponseEntity<>("Login successful. Role: " + role, HttpStatus.OK);
+                return new ResponseEntity<>(
+                        "Login successful. Role: " + role + "  encoded credentials " + encodedCredentials,
+                        HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("Register your account..", HttpStatus.UNAUTHORIZED);
             }
@@ -90,34 +92,4 @@ public class UserController {
         }
     }
 
-
-
-    // @GetMapping("/orderhistory")
-    // public ResponseEntity<List<OrderHistoryDTO>> getOrderHistory(@RequestHeader("Authorization") String authHeader) {
-    //     try {
-    //         String credentials = new String(Base64.getDecoder().decode(authHeader.split(" ")[1]));
-    //         String splitCredentials[] = credentials.split(":");
-    //         String email = splitCredentials[0];
-    //         String password = splitCredentials[1];
-    //         User user = userService.findByEmailAndPassword(email, password);
-
-    //         if (user != null) {
-    //             List<OrderItem> orderItems = orderItemRepository.findByOrderUser(user);
-    //             List<Orders> orders = ordersRepository.findByUser(user);
-    //             List<OrderHistoryDTO> orderHistoryDTO = orderItems.stream()
-    //                     .map(orderItem -> new OrderHistoryDTO(orderItem.getOrder().getOrderdate(),
-    //                             orderItem.getProduct().getName(), orderItem.getQuantity(), orderItem.getPrice()))
-    //                     .collect(Collectors.toList());
-
-    //             return new ResponseEntity<>(orderHistoryDTO, HttpStatus.OK);
-    //         } else {
-    //             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-    //         }
-    //     } catch (Exception e) {
-    //         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    //     }
-    // }
-
 }
-
-
