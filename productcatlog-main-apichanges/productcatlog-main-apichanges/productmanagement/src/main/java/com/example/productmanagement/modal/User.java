@@ -29,7 +29,7 @@ public class User {
 
     @ManyToOne
     @JoinColumn(name = "role_id")
-    private Role role;
+    private Role role;    
 
     private boolean is_active = true;
 

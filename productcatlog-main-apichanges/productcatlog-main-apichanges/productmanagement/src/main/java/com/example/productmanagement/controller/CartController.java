@@ -51,9 +51,8 @@ public class CartController {
     @Autowired
     private OrderItemRepository orderItemRepository;
 
-
     @PostMapping("/add-cart/{productId}")
-    public ResponseEntity<?> addtocart(@PathVariable Long productId, @RequestParam int quantity,
+    public ResponseEntity<String> addtocart(@PathVariable Long productId, @RequestParam int quantity,
             @RequestHeader("Authorization") String authHeader) {
         try {
             String credentials = new String(Base64.getDecoder().decode(authHeader.split(" ")[1]));
@@ -67,7 +66,7 @@ public class CartController {
 
                 if (product != null) {
                     if (quantity > product.getAvailableStock()) {
-                        return new ResponseEntity<>("Requested quantity exceeds available stock",
+                        return new ResponseEntity<>("Requested quantity is more than the  available stock",
                                 HttpStatus.BAD_REQUEST);
                     }
                     if (quantity > 0) {
@@ -112,6 +111,7 @@ public class CartController {
             User user = userService.findByEmailAndPassword(email, password);
             if (user != null) {
                 List<CartItem> cart = user.getCartItem();
+                // Optional<CartItem> cart1=cartItemRepository.findByUser(user);
                 if (cart.isEmpty()) {
                     return new ResponseEntity<>("cart is empty", HttpStatus.OK);
                 } else {
@@ -163,17 +163,18 @@ public class CartController {
                 order.setPayment_id(paymentMethodRepository.getById(paymentMethodId));
                 order.setShippingAddress(shippingAddress);
                 order.setOrderdate(new Timestamp(System.currentTimeMillis()));
-                ordersRepository.save(order);
+                
 
                 List<OrderItem> orderItems = new ArrayList<>();
                 for (CartItem cartItem : cartItems) {
                     if (cartItem.getQuantity() > cartItem.getProduct().getAvailableStock()) {
                         return new ResponseEntity<>("Quantity is higher than available stock", HttpStatus.BAD_REQUEST);
                     }
+
                     int remainingStock = cartItem.getProduct().getAvailableStock() - cartItem.getQuantity();
                     cartItem.getProduct().setAvailableStock(remainingStock);
                     productRepository.save(cartItem.getProduct());
-
+                    ordersRepository.save(order);
                     OrderItem orderItem = new OrderItem();
                     orderItem.setOrder(order);
                     orderItem.setProduct(cartItem.getProduct());
@@ -196,56 +197,4 @@ public class CartController {
         }
     }
 
-   
 }
-/*
- * 
- * @GetMapping("/orderhistory")
-public ResponseEntity<List<OrderHistoryDTO>> getOrderHistory(@RequestHeader("Authorization") String authHeader) {
-    try {
-        String credentials = new String(Base64.getDecoder().decode(authHeader.split(" ")[1]));
-        String[] splitCredentials = credentials.split(":");
-        String email = splitCredentials[0];
-        String password = splitCredentials[1];
-        User user = userService.findByEmailAndPassword(email, password);
-
-        if (user != null) {
-            List<Order> orders = ordersRepository.findByUser(user);
-            List<OrderHistoryDTO> orderHistoryList = new ArrayList<>();
-
-            for (Order order : orders) {
-                BigDecimal totalAmount = order.getOrderItems().stream()
-                        .map(item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
-                        .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-                OrderHistoryDTO orderHistoryDTO = new OrderHistoryDTO(
-                        order.getId(),
-                        order.getOrderdate(),
-                        totalAmount
-                );
-
-                orderHistoryList.add(orderHistoryDTO);
-            }
-
-            return new ResponseEntity<>(orderHistoryList, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-    } catch (Exception e) {
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }
-}
-public class OrderHistoryDTO {
-    private Long orderId;
-    private Timestamp orderDate;
-    private BigDecimal totalAmount;
-
-    public OrderHistoryDTO(Long orderId, Timestamp orderDate, BigDecimal totalAmount) {
-        this.orderId = orderId;
-        this.orderDate = orderDate;
-        this.totalAmount = totalAmount;
-    }
-
-    // Getters and setters (or make fields public)
-}
- */

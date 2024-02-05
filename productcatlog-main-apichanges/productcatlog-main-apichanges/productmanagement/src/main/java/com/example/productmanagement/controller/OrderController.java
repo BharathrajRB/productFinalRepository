@@ -65,7 +65,7 @@ public class OrderController {
                 return new ResponseEntity<>(orderHistoryDTOList, HttpStatus.OK);
             }
 
-            return new ResponseEntity<>("User not found", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("User not found ", HttpStatus.UNAUTHORIZED);
 
         } catch (Exception e) {
 
