@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.productmanagement.modal.Product;
 import com.example.productmanagement.modal.User;
 import com.example.productmanagement.repository.ProductRepository;
+import com.example.productmanagement.service.ProductException;
 import com.example.productmanagement.service.ProductService;
 import com.example.productmanagement.service.UserService;
 
@@ -44,6 +45,9 @@ public class ProductController {
       User user = userService.findByEmailAndPassword(email, password);
       if (user != null && "admin".equals(user.getRole_id().getName())) {
         if (product.getAvailableStock() > 0) {
+          if (product.getPrice().signum() < 0) {
+            return new ResponseEntity<>("price is less than 0", HttpStatus.BAD_REQUEST);
+          }
           productService.createProduct(product);
           return new ResponseEntity<>("Product created successfully", HttpStatus.OK);
         } else {
@@ -53,7 +57,7 @@ public class ProductController {
       } else {
         return new ResponseEntity<>("You are not authorized to perform this operation", HttpStatus.FORBIDDEN);
       }
-    } catch (Exception e) {
+    } catch (ProductException e) {
       return new ResponseEntity<>("Error during product creation", HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }

@@ -1,6 +1,7 @@
 
 package com.example.productmanagement.service;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import com.example.productmanagement.modal.Product;
@@ -30,8 +31,8 @@ public class ProductService {
       updateProduct.setPrice(product.getPrice());
       updateProduct.setActive(product.isActive());
       updateProduct.setAvailableStock(product.getAvailableStock());
-     
-     // updateProduct.setCategory_id(product.getCategory_id());
+
+      // updateProduct.setCategory_id(product.getCategory_id());
 
       productRepository.save(updateProduct);
 

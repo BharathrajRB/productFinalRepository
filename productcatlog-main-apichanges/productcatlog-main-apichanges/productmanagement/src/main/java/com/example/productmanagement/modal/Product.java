@@ -88,5 +88,4 @@ public class Product {
     this.category = category_id;
   }
 
-
 }
