@@ -32,6 +32,8 @@ public class UserService {
 
     public String encodeCredentials(String email, String password) {
         String credentials = email + ":" + password;
+        // byte[] byte_arr = credentials.getBytes();
+        // String result = Base64.getEncoder().encodeToString(byte_arr);
         String result = Base64.getEncoder().encodeToString(credentials.getBytes());
 
         return result;

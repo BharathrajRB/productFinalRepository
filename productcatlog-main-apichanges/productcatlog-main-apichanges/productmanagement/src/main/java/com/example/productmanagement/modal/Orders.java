@@ -31,7 +31,7 @@ public class Orders {
     private PaymentMethod payment_id;
     private String shippingAddress;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order")
     @JsonManagedReference
     private List<OrderItem> orderItems;
 

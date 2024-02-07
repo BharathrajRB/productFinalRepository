@@ -32,7 +32,7 @@ public class ProductService {
       updateProduct.setActive(product.isActive());
       updateProduct.setAvailableStock(product.getAvailableStock());
 
-      // updateProduct.setCategory_id(product.getCategory_id());
+    
 
       productRepository.save(updateProduct);
 

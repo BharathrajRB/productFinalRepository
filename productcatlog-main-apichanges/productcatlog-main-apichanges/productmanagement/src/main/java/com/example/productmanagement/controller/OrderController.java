@@ -50,19 +50,22 @@ public class OrderController {
             if (user != null) {
                 List<Orders> orders = ordersRepository.findByUser(user);
                 List<OrderHistoryDTO> orderHistoryDTOList = new ArrayList<>();
+                if (!orders.isEmpty()) {
+                    for (Orders order : orders) {
+                        OrderHistoryDTO orderHistoryDTO = new OrderHistoryDTO();
+                        orderHistoryDTO.setOrderId(order.getId());
+                        orderHistoryDTO.setOrderDate(order.getOrderdate());
+                        orderHistoryDTO.setPaymentMethod(order.getPayment_id().getName());
+                        int totalCount = order.getOrderItems().stream().mapToInt(OrderItem::getQuantity).sum();
+                        orderHistoryDTO.setTotalCount(totalCount);
+                        orderHistoryDTO.setTotalAmount(order.getTotal_price());
+                        orderHistoryDTOList.add(orderHistoryDTO);
+                    }
 
-                for (Orders order : orders) {
-                    OrderHistoryDTO orderHistoryDTO = new OrderHistoryDTO();
-                    orderHistoryDTO.setOrderId(order.getId());
-                    orderHistoryDTO.setOrderDate(order.getOrderdate());
-                    orderHistoryDTO.setPaymentMethod(order.getPayment_id().getName());
-                    int totalCount = order.getOrderItems().stream().mapToInt(OrderItem::getQuantity).sum();
-                    orderHistoryDTO.setTotalCount(totalCount);
-                    orderHistoryDTO.setTotalAmount(order.getTotal_price());
-                    orderHistoryDTOList.add(orderHistoryDTO);
+                    return new ResponseEntity<>(orderHistoryDTOList, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>("No order from user please Order", HttpStatus.NOT_FOUND);
                 }
-
-                return new ResponseEntity<>(orderHistoryDTOList, HttpStatus.OK);
             }
 
             return new ResponseEntity<>("User not found", HttpStatus.UNAUTHORIZED);

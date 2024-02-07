@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.productmanagement.modal.Product;
@@ -38,6 +37,7 @@ public class ProductController {
   public ResponseEntity<String> createProduct(@RequestHeader("Authorization") String authHeader,
       @RequestBody Product product) {
     try {
+      
       String credentials = new String(Base64.getDecoder().decode(authHeader.split(" ")[1]));
       String[] splitCredentials = credentials.split(":");
       String email = splitCredentials[0];
@@ -80,13 +80,14 @@ public class ProductController {
 
     } catch (Exception e) {
 
-      return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+      return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   @DeleteMapping("/products/{productId}")
   public ResponseEntity<String> deleteProduct(@RequestHeader("Authorization") String authHeader,
       @PathVariable("productId") Long id) {
+
     try {
       System.out.println("delete");
       String credentials = new String(Base64.getDecoder().decode(authHeader.split(" ")[1]));
@@ -102,7 +103,7 @@ public class ProductController {
       }
 
     } catch (Exception e) {
-      return new ResponseEntity<>("Error during product delete", HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>("Error during product delete", HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 

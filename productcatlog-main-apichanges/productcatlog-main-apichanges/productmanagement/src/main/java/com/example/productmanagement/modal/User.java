@@ -2,7 +2,6 @@ package com.example.productmanagement.modal;
 
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -49,7 +48,7 @@ public class User {
         this.cartItem = cartItem;
     }
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user")
     @JsonManagedReference
     private List<CartItem> cartItem;
 
@@ -108,5 +107,7 @@ public class User {
     public void setIs_active(boolean is_active) {
         this.is_active = is_active;
     }
+
+   
 
 }
